@@ -1,9 +1,8 @@
 package com.elixsr.portforwarder.ui.preferences;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -47,7 +46,7 @@ public class IpAddressCheckerActivity extends BaseActivity {
         try {
             this.interfaces = InterfaceHelper.generateInterfaceModelList();
         } catch (SocketException e) {
-            Toast.makeText(this, "Could not retrieve interfaces", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_could_not_retrieve_interfaces), Toast.LENGTH_SHORT).show();
             finish();
         }
 

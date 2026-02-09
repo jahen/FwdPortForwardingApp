@@ -20,6 +20,7 @@ package com.elixsr.portforwarder.forwarding;
 
 import android.util.Log;
 
+import com.elixsr.portforwarder.R;
 import com.elixsr.portforwarder.exceptions.BindException;
 
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class UdpForwarder extends Forwarder implements Callable<Void> {
                 inChannel.socket().bind(this.from);
             } catch (SocketException e) {
                 Log.e(TAG, String.format(super.BIND_FAILED_MESSAGE, from.getPort(), protocol, ruleName), e);
-                throw new BindException(String.format(super.BIND_FAILED_MESSAGE, from.getPort(), protocol, ruleName), e);
+                throw new BindException(R.string.error_bind_port, new Object[]{from.getPort(), protocol, ruleName}, e);
             }
 
             Selector selector = Selector.open();

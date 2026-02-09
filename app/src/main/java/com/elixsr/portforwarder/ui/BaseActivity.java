@@ -22,12 +22,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -58,22 +59,52 @@ public abstract class BaseActivity extends AppCompatActivity {
                 themeChangeReceiver,
                 themeChangeIntentFilter);
 
-        // Check preferences to determine which theme is requested
-        if (PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean("pref_dark_theme", false)) {
-            setTheme(R.style.DarkTheme_NoActionBar);
-        }
+        applyThemeFromPreference();
         super.onCreate(ofJoy);
     }
 
     @Override
     protected void onResume() {
-        // Check preferences to determine which theme is requested
-        if (PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean("pref_dark_theme", false)) {
-            setTheme(R.style.DarkTheme_NoActionBar);
-        }
+        applyThemeFromPreference();
         super.onResume();
+    }
+
+    private void applyThemeFromPreference() {
+        String mode = getDarkThemeMode();
+        boolean useDark = false;
+        if ("dark".equals(mode)) {
+            useDark = true;
+        } else if ("light".equals(mode)) {
+            useDark = false;
+        } else {
+            // follow_system
+            int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            useDark = (nightModeFlags == Configuration.UI_MODE_NIGHT_YES);
+        }
+        setTheme(useDark ? R.style.DarkTheme_NoActionBar : R.style.AppTheme_NoActionBar);
+    }
+
+    private String getDarkThemeMode() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        try {
+            String mode = prefs.getString("pref_dark_theme", "follow_system");
+            if (mode.equals("follow_system") || mode.equals("dark") || mode.equals("light")) {
+                return mode;
+            }
+            if (mode.equals("on") || mode.equals("off")) {
+                // Migrate old values
+                String newMode = mode.equals("on") ? "dark" : "follow_system";
+                prefs.edit().putString("pref_dark_theme", newMode).apply();
+                return newMode;
+            }
+        } catch (ClassCastException ignored) {
+            // Old CheckBoxPreference stored boolean, migrate to new format
+            boolean oldValue = prefs.getBoolean("pref_dark_theme", false);
+            String mode = oldValue ? "dark" : "follow_system";
+            prefs.edit().remove("pref_dark_theme").putString("pref_dark_theme", mode).apply();
+            return mode;
+        }
+        return "follow_system";
     }
 
     @Override

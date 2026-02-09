@@ -20,7 +20,7 @@ package com.elixsr.portforwarder.ui.rules;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -124,7 +124,7 @@ public class NewRuleActivity extends BaseRuleActivity {
             startActivity(mainActivityIntent);
             finish();
         } else {
-            Toast.makeText(this, "Rule is not valid. Please check your input.",
+            Toast.makeText(this, getString(R.string.toast_error_rule_not_valid_text),
                     Toast.LENGTH_LONG).show();
         }
 

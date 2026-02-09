@@ -24,10 +24,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +54,6 @@ public class EditRuleActivity extends BaseRuleActivity {
     private static final String TAG = "EditRuleActivity";
 
     private static final String NO_RULE_ID_FOUND_LOG_MESSAGE = "No ID was supplied to EditRuleActivity";
-    private static final String NO_RULE_ID_FOUND_TOAST_MESSAGE = "Could not locate rule";
 
     private static final String ACTION_DELETE = "Delete";
     private static final String LABEL_DELETE_RULE = "Delete Rule";
@@ -78,7 +77,7 @@ public class EditRuleActivity extends BaseRuleActivity {
         if (!getIntent().getExtras().containsKey(RuleHelper.RULE_MODEL_ID)) {
 
             /// Show toast containing message to the user
-            Toast.makeText(this, NO_RULE_ID_FOUND_TOAST_MESSAGE,
+            Toast.makeText(this, getString(R.string.toast_could_not_locate_rule),
                     Toast.LENGTH_SHORT).show();
 
             Log.e(TAG, NO_RULE_ID_FOUND_LOG_MESSAGE);

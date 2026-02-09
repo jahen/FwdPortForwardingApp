@@ -2,9 +2,9 @@ package com.elixsr.portforwarder.ui.preferences;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.design.widget.TextInputEditText;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -104,14 +104,11 @@ public class ImportRulesActivity extends BaseActivity {
             return;
         }
 
-        // TODO: Expose as localised strings
-        String importText = "You are about to import <b>" + ruleModels.size() + "</b> rule, configure the interface and target address below";
-        if(ruleModels.size() > 1 ) {
-            importText = "You are about to import <b>" + ruleModels.size() + "</b> rules, configure the interface and target address below";
-        }
-
+        String importText = ruleModels.size() == 1
+                ? getString(R.string.import_about_to_import_rule, ruleModels.size())
+                : getString(R.string.import_about_to_import_rules, ruleModels.size());
         importRulesText.setText(Html.fromHtml(importText));
-        importRulesButton.setText("IMPORT " + ruleModels.size() + " RULES");
+        importRulesButton.setText(getString(R.string.import_button_rules, ruleModels.size()));
 
         importRulesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,14 +152,14 @@ public class ImportRulesActivity extends BaseActivity {
             }
 
             if (ruleFailedValidation) {
-                Toast.makeText(getApplicationContext(), "Some rules failed validation. Imported " + successfulRuleAdditions + " rules.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.import_some_failed, successfulRuleAdditions), Toast.LENGTH_LONG).show();
             }
         } catch (FileNotFoundException e) {
-            Toast.makeText(getApplicationContext(), "Error importing rules - No valid file found.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.import_error_no_file), Toast.LENGTH_LONG).show();
         } catch (JsonSyntaxException e) {
-            Toast.makeText(getApplicationContext(), "Error importing rules - JSON file is malformed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.import_error_malformed), Toast.LENGTH_LONG).show();
         } catch (JsonParseException e) {
-            Toast.makeText(getApplicationContext(), "Error importing rules - Rule list is invalid.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.import_error_invalid_list), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -182,7 +179,7 @@ public class ImportRulesActivity extends BaseActivity {
                 targetIpAddress = targetIpAddressText.getText().toString();
             }
         } catch (RuleValidationException e) {
-            targetIpAddressText.setError(e.getMessage());
+            targetIpAddressText.setError(e.getLocalizedMessage(getResources()));
             validationError = true;
         }
 
@@ -203,7 +200,7 @@ public class ImportRulesActivity extends BaseActivity {
             ruleDao.insertRule(ruleModel);
         }
 
-        Toast.makeText(getApplicationContext(), "Imported " + ruleModels.size() + " rules.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.import_success, ruleModels.size()), Toast.LENGTH_LONG).show();
 
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -225,8 +222,7 @@ public class ImportRulesActivity extends BaseActivity {
             Log.i(TAG, "Error generating Interface list", e);
 
             // Show toast and move to main screen
-            Toast.makeText(this, "Problem locating network interfaces. Please refer to 'help' to " +
-                            "assist with troubleshooting.",
+            Toast.makeText(this, getString(R.string.error_network_interfaces),
                     Toast.LENGTH_LONG).show();
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
             startActivity(mainActivityIntent);
@@ -236,8 +232,7 @@ public class ImportRulesActivity extends BaseActivity {
 
         // Check to ensure we have some interface to show!
         if (interfaces == null || interfaces.isEmpty()) {
-            Toast.makeText(this, "Could not locate any network interfaces. Please refer to 'help'" +
-                            " to assist with troubleshooting.",
+            Toast.makeText(this, getString(R.string.error_no_network_interfaces),
                     Toast.LENGTH_LONG).show();
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
             startActivity(mainActivityIntent);

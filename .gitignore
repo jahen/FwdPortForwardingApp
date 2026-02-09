@@ -1,8 +1,12 @@
 *.iml
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
+/.idea/
 .DS_Store
 /build
 /captures
+
+# 签名文件，勿提交
+*.keystore
+*.jks
+keystore.properties

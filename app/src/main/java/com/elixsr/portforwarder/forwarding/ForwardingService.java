@@ -25,10 +25,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.net.Inet4Address;
@@ -81,7 +81,7 @@ public class ForwardingService extends IntentService {
     public static final String PORT_FORWARD_SERVICE_ERROR_MESSAGE =
             "com.elixsr.portforwarder.forwarding.ForwardingService.PORT_FORWARD_ERROR_MESSAGE";
 
-    private static final String PORT_FORWARD_SERVICE_WAKE_LOCK_TAG = "PortForwardServiceWakeLockTag";
+    private static final String WAKE_LOCK_TAG_SUFFIX = "PortForwardServiceWakeLockTag";
 
     private static final String TAG = "ForwardingService";
 
@@ -125,10 +125,11 @@ public class ForwardingService extends IntentService {
 
         /*
         Sourced from: https://developer.android.com/intl/ja/training/scheduling/wakelock.html
+         * Tag uses package name prefix so it stays correct when applicationId changes.
          */
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                PORT_FORWARD_SERVICE_WAKE_LOCK_TAG);
+        String wakeLockTag = getPackageName() + ":" + WAKE_LOCK_TAG_SUFFIX;
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, wakeLockTag);
         wakeLock.acquire();
 
         tracker = ((FwdApplication) this.getApplication()).getDefaultTracker();
@@ -252,13 +253,17 @@ public class ForwardingService extends IntentService {
                 completedFuture.get();
             } catch (ExecutionException e) {
                 Throwable cause = e.getCause();
+                String errorMessage = cause.getMessage();
+                if (cause instanceof com.elixsr.portforwarder.exceptions.BindException
+                        && ((com.elixsr.portforwarder.exceptions.BindException) cause).hasResourceId()) {
+                    errorMessage = ((com.elixsr.portforwarder.exceptions.BindException) cause)
+                            .getLocalizedMessage(getResources());
+                }
 
                 Log.e(TAG, "Error when forwarding port.", e);
                 localIntent =
                         new Intent(BROADCAST_ACTION)
-                                // Puts the status into the Intent
-                                .putExtra(PORT_FORWARD_SERVICE_ERROR_MESSAGE, e.getCause().getMessage());
-                // Broadcasts the Intent to receivers in this app.
+                                .putExtra(PORT_FORWARD_SERVICE_ERROR_MESSAGE, errorMessage);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
 
                 break;

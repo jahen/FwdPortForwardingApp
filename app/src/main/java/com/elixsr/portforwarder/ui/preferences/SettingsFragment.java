@@ -21,15 +21,20 @@ package com.elixsr.portforwarder.ui.preferences;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -74,8 +79,6 @@ public class SettingsFragment extends PreferenceFragment {
 
     private static final String TAG = "SettingsFragment";
 
-    private static final String CLEAR_RULES_COMPLETE_MESSAGE = "All rules have been removed";
-
     private static final String CATEGORY_RULES = "Rules";
     private static final String ACTION_DELETE = "Clear";
     private static final String LABEL_DELETE_RULE = "Delete All Rules";
@@ -85,7 +88,8 @@ public class SettingsFragment extends PreferenceFragment {
 
     private LocalBroadcastManager localBroadcastManager;
     private ForwardingManager forwardingManager;
-    private Preference clearRulesButton, versionNamePreference, exportRulesPreference, importRulesPreference, changeThemeToggle;
+    private Preference clearRulesButton, versionNamePreference, exportRulesPreference, importRulesPreference;
+    private ListPreference changeThemeToggle;
 
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferencesListener;
 
@@ -147,7 +151,7 @@ public class SettingsFragment extends PreferenceFragment {
                                         .setLabel(LABEL_DELETE_RULE)
                                         .build());
 
-                                Toast.makeText(getActivity(), CLEAR_RULES_COMPLETE_MESSAGE,
+                                Toast.makeText(getActivity(), getString(R.string.clear_rules_complete),
                                         Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -225,8 +229,18 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
 
-        changeThemeToggle = (Preference) findPreference(getString(R.string.pref_dark_theme));
+        changeThemeToggle = (ListPreference) findPreference(getString(R.string.pref_dark_theme));
+        updateThemePreferenceSummary();
+    }
 
+    private void updateThemePreferenceSummary() {
+        if (changeThemeToggle != null && changeThemeToggle.getEntry() != null) {
+            CharSequence entry = changeThemeToggle.getEntry();
+            SpannableString ss = new SpannableString(String.valueOf(entry));
+            ss.setSpan(new AbsoluteSizeSpan(11, true), 0, ss.length(), 0);
+            ss.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.preference_summary_color)), 0, ss.length(), 0);
+            changeThemeToggle.setSummary(ss);
+        }
     }
 
     @Override
@@ -238,20 +252,19 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if (key.equals("pref_dark_theme")) {
-
+                    updateThemePreferenceSummary();
 
                     // Build and send an Event.
                     tracker.send(new HitBuilders.EventBuilder()
                             .setCategory(CATEGORY_THEME)
                             .setAction(ACTION_CHANGE)
-                            .setLabel("Dark Mode: " + sharedPreferences
-                                    .getBoolean("pref_dark_theme", false))
+                            .setLabel("Color theme: " + sharedPreferences
+                                    .getString("pref_dark_theme", "follow_system"))
                             .build());
 
                     Intent intent = new Intent();
                     intent.setAction(DARK_MODE_BROADCAST);
                     localBroadcastManager.sendBroadcast(intent);
-
                 }
             }
         };
@@ -263,6 +276,7 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onStart() {
         super.onStart();
+        updateThemePreferenceSummary();
         if (forwardingManager.isEnabled()) {
             clearRulesButton.setEnabled(false);
             importRulesPreference.setEnabled(false);
@@ -271,15 +285,14 @@ public class SettingsFragment extends PreferenceFragment {
             importRulesPreference.setEnabled(true);
         }
 
-        String versionName = "Version ";
         try {
-            versionName = versionName + getActivity().getBaseContext().getPackageManager()
+            String v = getActivity().getBaseContext().getPackageManager()
                     .getPackageInfo(getActivity().getBaseContext().getPackageName(), 0).versionName;
+            versionNamePreference.setTitle(getString(R.string.version_label, v));
         } catch (PackageManager.NameNotFoundException e) {
             Log.i(TAG, "Application Version could not be found.", e);
-            versionName = versionName + "not found";
+            versionNamePreference.setTitle(getString(R.string.version_not_found));
         }
-        versionNamePreference.setTitle(versionName);
     }
 
     @Override
@@ -296,9 +309,9 @@ public class SettingsFragment extends PreferenceFragment {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult(Intent.createChooser(intent, "Select a rule list to import"), RULE_LIST_CODE);
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.import_select_file)), RULE_LIST_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getActivity(), "A file manager is required to import rule lists.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.import_file_manager_required), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -321,8 +334,8 @@ public class SettingsFragment extends PreferenceFragment {
                 // Everything good, lets send an intent
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("application/json");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Fwd Rule List");
-                intent.putExtra(Intent.EXTRA_TEXT, "Your fwd rules have been attached with the name '" + outputFile.getName() + "'.");
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.export_subject));
+                intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.export_attachment_text, outputFile.getName()));
                 intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getActivity().getApplicationContext(), getActivity().getApplicationContext().getPackageName() + ".util.provider", outputFile));
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(Intent.createChooser(intent, getString(R.string.export_rules_action_title)));
@@ -331,10 +344,10 @@ public class SettingsFragment extends PreferenceFragment {
 
             } catch (IOException e) {
                 Log.e(TAG, "onDataChange: error trying to create file to store exported data", e);
-                Toast.makeText(getActivity().getBaseContext(), "Error when trying to export dreams.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getBaseContext(), getString(R.string.export_error), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(getActivity().getBaseContext(), "No rules to export.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getBaseContext(), getString(R.string.no_rules_to_export), Toast.LENGTH_SHORT).show();
         }
     }
 

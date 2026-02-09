@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fwd：端口转发</string>
+    <string name="app_tag">Fwd</string>
+
+    <!-- 主界面 -->
+    <string name="action_start_forwarding">开始</string>
+    <string name="action_stop_forwarding">停止</string>
+    <string name="empty_state_text">暂无规则</string>
+
+    <string name="pref_help_link_text">帮助</string>
+    <string name="action_help">帮助</string>
+    <string name="help_title">帮助</string>
+
+    <string name="pref_about_link_text">关于 Elixsr</string>
+    <string name="about_elixsr_title">关于 Elixsr</string>
+
+    <string name="settings_title">设置</string>
+    <string name="action_settings">设置</string>
+    <string name="accessibility_main_activity_rule_list">规则列表</string>
+
+    <!-- 查看或编辑规则 -->
+    <string name="new_rule_title">新建规则</string>
+    <string name="edit_rule_title">编辑规则</string>
+
+    <string name="action_save_rule">保存</string>
+    <string name="action_delete_rule">删除</string>
+
+    <string name="switch_on_text">已启用</string>
+    <string name="switch_off_text">已禁用</string>
+
+    <string name="rule_title_hint">规则名称</string>
+    <string name="select_rule_protocol">协议</string>
+    <string name="new_rule_from">来源</string>
+    <string name="new_rule_port">端口</string>
+    <string name="new_rule_target">目标</string>
+    <string name="new_rule_target_ip_address">目标 IP 地址</string>
+
+    <string-array name="rule_protocol_array">
+        <item>TCP</item>
+        <item>UDP</item>
+        <item>两者</item>
+    </string-array>
+
+    <string-array name="pref_dark_theme_entries">
+        <item>浅色</item>
+        <item>深色</item>
+        <item>跟随系统</item>
+    </string-array>
+
+    <!-- 设置 -->
+    <string name="pref_general_category_title">常规</string>
+    <string name="pref_clear_rules_text">清空规则</string>
+    <string name="pref_dark_theme_text">颜色主题</string>
+    <string name="pref_start_on_boot_text">开机自动启动转发</string>
+    <string name="pref_about_category_title">关于</string>
+    <string name="pref_import_export_category_title">规则管理</string>
+    <string name="pref_import_export_button">导入规则</string>
+    <string name="pref_export_button">导出规则</string>
+    <string name="ip_checker_title">IP 检查</string>
+    <string name="start_rule_error_message">启动规则时出错</string>
+    <string name="import_rules_button_text">导入规则</string>
+    <string name="export_rules_button_text">导出规则</string>
+    <string name="export_rules_action_title">导出规则</string>
+    <string name="pref_ip_checker_title">IP 检查</string>
+    <string name="pref_import_export" />
+    <string name="pref_import_export_title">导入/导出规则</string>
+    <string name="advanced_settings_title">高级设置</string>
+    <string name="pref_advanced_category_title">高级</string>
+
+    <!-- 高级设置 -->
+    <string name="pref_enable_ads">禁用广告</string>
+    <string name="pref_enable_ads_summary">广告有助于支持 Fwd 的开发</string>
+    <string name="ip_checker_tool_public_text">公网</string>
+    <string name="ip_checker_tool_private_text">内网</string>
+
+    <!-- 应用引导 -->
+    <string name="app_intro_1_title">添加规则</string>
+    <string name="app_intro_1_text">创建和编辑端口转发规则</string>
+    <string name="app_intro_2_title">开始与停止</string>
+    <string name="app_intro_2_text">一键开始或停止所有规则的转发</string>
+    <string name="app_intro_3_title">详细帮助</string>
+    <string name="app_intro_3_text">如需支持，请查看帮助章节</string>
+
+    <!-- 确认对话框 -->
+    <string name="alert_dialog_delete_entry_title">删除规则</string>
+    <string name="alert_dialog_delete_entry_text">确定要删除这条规则吗？</string>
+
+    <string name="alert_dialog_delete_all_rules_title">删除全部规则</string>
+    <string name="alert_dialog_delete_all_rules_text">确定要删除所有规则吗？</string>
+
+    <!-- 提示条 -->
+    <string name="snackbar_port_forwarding_started_text">端口转发已开始</string>
+    <string name="snackbar_port_forwarding_stopped_text">端口转发已停止</string>
+
+    <!-- 错误信息 -->
+    <string name="text_input_error_enter_name_text">请输入名称</string>
+    <string name="text_input_error_enter_ip_address_text">请输入目标 IP 地址</string>
+    <string name="text_input_error_invalid_ip_address_text">请输入有效的 IP 地址</string>
+    <string name="toast_error_rule_not_valid_text">规则无效，请检查输入。</string>
+
+    <!-- 校验错误信息 -->
+    <string name="error_port_range">请输入大于等于 %1$s 且小于等于 %2$s 的端口值</string>
+    <string name="error_from_port_range">来源端口必须大于等于 %1$s 且小于等于 %2$s</string>
+    <string name="error_target_port_range">目标端口必须大于等于 %1$s 且小于等于 %2$s</string>
+    <string name="error_enter_name">请输入名称</string>
+    <string name="error_enter_target_address">请输入目标地址</string>
+    <string name="error_target_ip_invalid">目标 IP 地址无效</string>
+
+    <!-- 网络接口错误 -->
+    <string name="error_network_interfaces">无法定位网络接口，请查看「帮助」进行故障排除。</string>
+    <string name="error_no_network_interfaces">未找到任何网络接口，请查看「帮助」进行故障排除。</string>
+    <string name="error_could_not_retrieve_interfaces">无法获取网络接口</string>
+
+    <!-- 导入/导出 -->
+    <string name="import_about_to_import_rule">即将导入 <b>%1$d</b> 条规则，请在下方配置接口和目标地址</string>
+    <string name="import_about_to_import_rules">即将导入 <b>%1$d</b> 条规则，请在下方配置接口和目标地址</string>
+    <string name="import_button_rules">导入 %1$d 条规则</string>
+    <string name="import_some_failed">部分规则校验失败，已导入 %1$d 条。</string>
+    <string name="import_error_no_file">导入失败：未找到有效文件。</string>
+    <string name="import_error_malformed">导入失败：JSON 格式错误。</string>
+    <string name="import_error_invalid_list">导入失败：规则列表无效。</string>
+    <string name="import_success">已导入 %1$d 条规则。</string>
+    <string name="import_select_file">选择要导入的规则列表</string>
+    <string name="import_file_manager_required">导入规则列表需要文件管理器。</string>
+
+    <!-- 设置 -->
+    <string name="clear_rules_complete">已清空全部规则</string>
+    <string name="version_label">版本 %1$s</string>
+    <string name="version_not_found">版本未知</string>
+    <string name="export_subject">Fwd 规则列表</string>
+    <string name="export_attachment_text">规则已附加，文件名：\'%1$s\'</string>
+    <string name="export_error">导出规则时出错。</string>
+    <string name="no_rules_to_export">没有可导出的规则。</string>
+
+    <!-- 转发错误 -->
+    <string name="error_bind_port">无法绑定端口 %1$s（%2$s 规则 \'%3$s\'）</string>
+
+    <!-- 编辑/新建规则 -->
+    <string name="toast_could_not_locate_rule">无法定位规则</string>
+    <string name="toast_rule_saved">规则已保存</string>
+    <string name="toast_rule_updated">规则已更新</string>
+
+    <!-- 通知 -->
+    <string name="notification_forwarding_active_title">端口转发运行中</string>
+    <string name="notification_forwarding_touch_disable_text">点击以停止</string>
+
+    <string-array name="sample_from_interfaces">
+        <item>示例0</item>
+        <item>示例1</item>
+    </string-array>
+
+    <string name="import_rules_title">导入规则</string>
+    <string name="title_activity_import_export_rules">导入规则</string>
+    <string name="import_export_support_site_title">帮助</string>
+    <string name="app_intro">应用引导</string>
+    <string name="title_activity_advanced_settings">高级设置</string>
+</resources>

@@ -19,8 +19,8 @@
 package com.elixsr.portforwarder.ui.rules;
 
 import android.content.Intent;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -65,9 +65,6 @@ public abstract class BaseRuleActivity extends BaseActivity {
     protected ArrayAdapter<String> fromSpinnerAdapter;
     protected ArrayAdapter<CharSequence> protocolAdapter;
 
-    private static final String INVALID_PORT_ERROR_MESSAGE = "Please enter a value greater than or equal to %s and less than or equal to %s";
-
-
     /**
      * Generate a user interface for all shared activities that use the {@link com.elixsr
      * .portforwarder.R.layout.rule_detail_view} layout.
@@ -99,8 +96,7 @@ public abstract class BaseRuleActivity extends BaseActivity {
             Log.i(TAG, "Error generating Interface list", e);
 
             // Show toast and move to main screen
-            Toast.makeText(this, "Problem locating network interfaces. Please refer to 'help' to " +
-                            "assist with troubleshooting.",
+            Toast.makeText(this, getString(R.string.error_network_interfaces),
                     Toast.LENGTH_LONG).show();
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
             startActivity(mainActivityIntent);
@@ -109,8 +105,7 @@ public abstract class BaseRuleActivity extends BaseActivity {
 
         // Check to ensure we have some interface to show!
         if (interfaces == null || interfaces.isEmpty()) {
-            Toast.makeText(this, "Could not locate any network interfaces. Please refer to 'help'" +
-                            " to assist with troubleshooting.",
+            Toast.makeText(this, getString(R.string.error_no_network_interfaces),
                     Toast.LENGTH_LONG).show();
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
             startActivity(mainActivityIntent);
@@ -210,7 +205,7 @@ public abstract class BaseRuleActivity extends BaseActivity {
                 ruleModel.setFromPort(Integer.valueOf(fromPortText.getText().toString()));
             }
         } catch (RuleValidationException e) {
-            fromPortText.setError(e.getMessage());
+            fromPortText.setError(e.getLocalizedMessage(getResources()));
         }
 
         /*
@@ -230,7 +225,7 @@ public abstract class BaseRuleActivity extends BaseActivity {
                 targetIpAddress = targetIpAddressText.getText().toString();
             }
         } catch (RuleValidationException e) {
-            targetIpAddressText.setError(e.getMessage());
+            targetIpAddressText.setError(e.getLocalizedMessage(getResources()));
         }
 
         /*
@@ -244,7 +239,7 @@ public abstract class BaseRuleActivity extends BaseActivity {
                 targetPort = Integer.valueOf(targetPortText.getText().toString());
             }
         } catch (RuleValidationException e) {
-            targetPortText.setError(e.getMessage());
+            targetPortText.setError(e.getLocalizedMessage(getResources()));
         }
 
         if (targetIpAddress != null && targetIpAddress.length() > 0 && targetPort >= 0) {

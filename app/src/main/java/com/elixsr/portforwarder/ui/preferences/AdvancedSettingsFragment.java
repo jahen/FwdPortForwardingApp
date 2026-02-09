@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceGroup;
-
 import com.elixsr.portforwarder.R;
 
 /**
@@ -17,7 +14,6 @@ import com.elixsr.portforwarder.R;
 
 public class AdvancedSettingsFragment extends PreferenceFragment {
 
-    private Preference advertisementsEnabled;
     private Preference ipChecker;
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferencesListener;
 
@@ -30,11 +26,6 @@ public class AdvancedSettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.advanced_preferences);
-        advertisementsEnabled = (Preference) findPreference(getString(R.string.pref_disable_ads_key));
-
-        // Remove advertisements option
-        PreferenceGroup mCategory = (PreferenceCategory) findPreference("pref_advanced_category");
-        mCategory.removePreference(advertisementsEnabled);
 
         ipChecker = (Preference) findPreference(getString(R.string.pref_ip_checker));
         ipChecker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

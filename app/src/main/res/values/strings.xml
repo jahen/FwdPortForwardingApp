@@ -43,10 +43,21 @@
         <item>BOTH</item>
     </string-array>
 
+    <string-array name="pref_dark_theme_entries">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Follow system</item>
+    </string-array>
+    <string-array name="pref_dark_theme_values" translatable="false">
+        <item>light</item>
+        <item>dark</item>
+        <item>follow_system</item>
+    </string-array>
+
     <!-- Settings -->
     <string name="pref_general_category_title">General</string>
     <string name="pref_clear_rules_text">Clear Rules</string>
-    <string name="pref_dark_theme_text">Dark Theme</string>
+    <string name="pref_dark_theme_text">Color theme</string>
     <string name="pref_start_on_boot_text">Start Forwarding on Startup</string>
     <string name="pref_about_category_title">About</string>
     <string name="pref_import_export_category_title">Manage Rules</string>
@@ -98,11 +109,47 @@
     <string name="notification_forwarding_active_title">Port Forwarding Active</string>
     <string name="notification_forwarding_touch_disable_text">Touch to disable</string>
 
-    <!-- TO ADD -->
+    <!-- Validation Error Messages -->
+    <string name="error_port_range">Please enter a value greater than or equal to %1$s and less than or equal to %2$s</string>
+    <string name="error_from_port_range">From port must be a value greater than or equal to %1$s and less than or equal to %2$s</string>
+    <string name="error_target_port_range">Target port must be a value greater than or equal to %1$s and less than or equal to %2$s</string>
+    <string name="error_enter_name">You must enter a name</string>
+    <string name="error_enter_target_address">You must enter a target address</string>
+    <string name="error_target_ip_invalid">Target IP address was not valid</string>
 
-    <!-- Error Messages -->
-    <!--<string name="p">Please enter a value greater than or equal to 1024 and less than or equal to 65535</string>-->
-    <!--<string name="port_eroolor">Could not bind port 6000 for TCP Rule 'fgh'</string>-->
+    <!-- Network Interface Errors -->
+    <string name="error_network_interfaces">Problem locating network interfaces. Please refer to \'help\' to assist with troubleshooting.</string>
+    <string name="error_no_network_interfaces">Could not locate any network interfaces. Please refer to \'help\' to assist with troubleshooting.</string>
+    <string name="error_could_not_retrieve_interfaces">Could not retrieve interfaces</string>
+
+    <!-- Import/Export -->
+    <string name="import_about_to_import_rule">You are about to import <b>%1$d</b> rule, configure the interface and target address below</string>
+    <string name="import_about_to_import_rules">You are about to import <b>%1$d</b> rules, configure the interface and target address below</string>
+    <string name="import_button_rules">IMPORT %1$d RULES</string>
+    <string name="import_some_failed">Some rules failed validation. Imported %1$d rules.</string>
+    <string name="import_error_no_file">Error importing rules - No valid file found.</string>
+    <string name="import_error_malformed">Error importing rules - JSON file is malformed.</string>
+    <string name="import_error_invalid_list">Error importing rules - Rule list is invalid.</string>
+    <string name="import_success">Imported %1$d rules.</string>
+    <string name="import_select_file">Select a rule list to import</string>
+    <string name="import_file_manager_required">A file manager is required to import rule lists.</string>
+
+    <!-- Settings -->
+    <string name="clear_rules_complete">All rules have been removed</string>
+    <string name="version_label">Version %1$s</string>
+    <string name="version_not_found">Version not found</string>
+    <string name="export_subject">Fwd Rule List</string>
+    <string name="export_attachment_text">Your fwd rules have been attached with the name \'%1$s\'.</string>
+    <string name="export_error">Error when trying to export rules.</string>
+    <string name="no_rules_to_export">No rules to export.</string>
+
+    <!-- Forwarding Errors -->
+    <string name="error_bind_port">Could not bind port %1$s for %2$s Rule \'%3$s\'</string>
+
+    <!-- Edit/New Rule -->
+    <string name="toast_could_not_locate_rule">Could not locate rule</string>
+    <string name="toast_rule_saved">Rule Saved</string>
+    <string name="toast_rule_updated">Rule Updated</string>
 
     <string-array name="sample_from_interfaces">
         <item>Rmte0</item>

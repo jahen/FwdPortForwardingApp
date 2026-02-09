@@ -18,35 +18,71 @@
 
 package com.elixsr.portforwarder.exceptions;
 
+import android.content.res.Resources;
+
 /**
  * Thrown when an attempt to bind a socket fails.
  */
 public class BindException extends Exception {
 
-    /**
-     * {@inheritDoc}
-     */
+    private final Integer resId;
+    private final Object[] formatArgs;
+
     public BindException() {
+        super();
+        this.resId = null;
+        this.formatArgs = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public BindException(String detailMessage) {
         super(detailMessage);
+        this.resId = null;
+        this.formatArgs = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public BindException(String detailMessage, Throwable throwable) {
         super(detailMessage, throwable);
+        this.resId = null;
+        this.formatArgs = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public BindException(Throwable throwable) {
         super(throwable);
+        this.resId = null;
+        this.formatArgs = null;
+    }
+
+    public BindException(int resId, Object... formatArgs) {
+        super("");
+        this.resId = resId;
+        this.formatArgs = formatArgs;
+    }
+
+    public BindException(int resId, Object[] formatArgs, Throwable cause) {
+        super("", cause);
+        this.resId = resId;
+        this.formatArgs = formatArgs;
+    }
+
+    public boolean hasResourceId() {
+        return resId != null;
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public Object[] getFormatArgs() {
+        return formatArgs;
+    }
+
+    public String getLocalizedMessage(Resources res) {
+        if (resId != null) {
+            if (formatArgs != null && formatArgs.length > 0) {
+                return res.getString(resId, formatArgs);
+            }
+            return res.getString(resId);
+        }
+        return getMessage();
     }
 }
